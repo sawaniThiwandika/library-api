@@ -2,12 +2,19 @@ package com.example.library_api.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.library_api.model.Book;
 import com.example.library_api.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+@Tag(
+        name = "Books",
+        description = "Create, read, update and delete books"
+)
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -27,6 +34,19 @@ public class BookController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @Operation(
+            summary = "Create a book",
+            description = "Adds a book and returns it with its new id."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Book created"
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Invalid input")
+
     @PostMapping
     public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) {
         return ResponseEntity.status(HttpStatus.CREATED)
